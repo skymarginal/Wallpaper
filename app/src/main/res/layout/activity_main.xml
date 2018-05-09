@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white"
+    tools:context="com.yscall.wallpaper.activity.MainActivity">
+
+    <ImageView
+        android:id="@+id/back"
+        style="@style/ClickableImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_back_black"
+        android:visibility="invisible"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" />
+
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_set" />
+    <!-- l 24  m 32  h 48  xh 64 -->
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
+
+</LinearLayout>
