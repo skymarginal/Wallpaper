@@ -6,7 +6,6 @@ import android.media.MediaPlayer;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
-
 import java.io.IOException;
 
 /**

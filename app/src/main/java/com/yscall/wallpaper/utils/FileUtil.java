@@ -32,7 +32,7 @@ public class FileUtil {
     public static boolean drawableSaveToDirectory(int id, String name) {
         File file = new File(Constants.ROOT_FOLDER,
                 name);
-        if(file.exists()) return true;
+        if (file.exists()) return true;
         Drawable drawable = AppContext.getAppContext().getResources().getDrawable(id);
         if (drawable == null)
             return false;
@@ -51,6 +51,28 @@ public class FileUtil {
             return false;
         }
         return true;
+    }
+
+    /**
+     * 图片转视频
+     */
+    public static boolean bitmapToVideo(Bitmap bitmap) {
+        if (bitmap == null) return false;
+        try {
+            File file = new File(Constants.QUIET_VIDEO_PATH);
+            if (!file.exists()) {
+                boolean b = file.createNewFile();
+            }
+            SequenceEncoderMp4 se = new SequenceEncoderMp4(file);
+            for (int i = 0; i < 1; i++) {
+                se.encodeImage(bitmap);
+            }
+            se.finish();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

@@ -12,7 +12,7 @@ import android.os.Environment;
 public class Constants {
 
     public static final String ROOT_FOLDER = Environment
-            .getExternalStorageDirectory() + "/wallpaper";
+            .getExternalStorageDirectory().getAbsolutePath() + "/Apache";
 
-
+    public static final String QUIET_VIDEO_PATH = ROOT_FOLDER + "/宇宙最好看.mp4";
 }

@@ -23,6 +23,7 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 import com.yscall.wallpaper.R;
 import com.yscall.wallpaper.adapter.GalleryAdapter;
 import com.yscall.wallpaper.bean.GalleryInfo;
+import com.yscall.wallpaper.service.QuietWallpaperService;
 import com.yscall.wallpaper.service.ResetWallpaperService;
 import com.yscall.wallpaper.service.VideoWallpaperService;
 import com.yscall.wallpaper.task.SetWallpaperTask;
@@ -32,8 +33,9 @@ import java.util.List;
 
 /**
  * 主页面
+ *
  * @author gerile
- * */
+ */
 public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener,
         View.OnClickListener, SetWallpaperTask.OnTaskCallback, GalleryAdapter.OnGalleryListener {
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
         findViewById(R.id.local).setOnClickListener(this);
         findViewById(R.id.video).setOnClickListener(this);
         findViewById(R.id.reset).setOnClickListener(this);
+        findViewById(R.id.quiet).setOnClickListener(this);
         title = findViewById(R.id.title);
         DiscreteScrollView picker = findViewById(R.id.picker);
         picker.setOrientation(DSVOrientation.HORIZONTAL);
@@ -105,18 +108,22 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
                 startActivity(Intent.createChooser(intent, "选择壁纸"));
                 break;
             case R.id.video:
-                Intent videoIntent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
-                videoIntent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                        new ComponentName(this, VideoWallpaperService.class));
-                startActivity(videoIntent);
+                startService(VideoWallpaperService.class);
                 break;
             case R.id.reset:
-                Intent resetIntent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
-                resetIntent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                        new ComponentName(this, ResetWallpaperService.class));
-                startActivity(resetIntent);
+                startService(ResetWallpaperService.class);
+                break;
+            case R.id.quiet:
+                startService(QuietWallpaperService.class);
                 break;
         }
+    }
+
+    private void startService(Class T) {
+        Intent intent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+        intent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                new ComponentName(this, T));
+        startActivity(intent);
     }
 
     @Override

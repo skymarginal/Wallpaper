@@ -7,7 +7,6 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.service.wallpaper.WallpaperService;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.yscall.wallpaper.AppContext;
@@ -50,20 +49,17 @@ public class ResetWallpaperService extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            Log.i("==TAG==","onSurfaceChanged --");
         }
 
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
-            Log.i("==TAG==","onSurfaceDestroyed --");
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("==TAG==","onDestroy --");
 //        Intent resetIntent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
 //        resetIntent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
 //                new ComponentName(this, ResetWallpaperService.class));

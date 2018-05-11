@@ -108,6 +108,19 @@
             android:layout_gravity="center_vertical"
             android:padding="6dp"
             android:src="@drawable/ic_reset" />
+
+        <Space
+            android:layout_width="30dp"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/quiet"
+            style="@style/ClickableImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="6dp"
+            android:src="@drawable/ic_quiet" />
     </LinearLayout>
 
 </LinearLayout>
