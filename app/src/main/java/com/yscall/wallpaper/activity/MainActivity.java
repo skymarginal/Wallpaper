@@ -2,9 +2,9 @@ package com.yscall.wallpaper.activity;
 
 import android.Manifest;
 import android.app.WallpaperManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,14 +23,19 @@ import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
 import com.yscall.wallpaper.R;
 import com.yscall.wallpaper.adapter.GalleryAdapter;
 import com.yscall.wallpaper.bean.GalleryInfo;
+import com.yscall.wallpaper.service.ResetWallpaperService;
+import com.yscall.wallpaper.service.VideoWallpaperService;
 import com.yscall.wallpaper.task.SetWallpaperTask;
 
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * 主页面
+ * @author gerile
+ * */
 public class MainActivity extends AppCompatActivity implements DiscreteScrollView.OnItemChangedListener,
-        View.OnClickListener, SetWallpaperTask.OnTaskCallback {
+        View.OnClickListener, SetWallpaperTask.OnTaskCallback, GalleryAdapter.OnGalleryListener {
 
     private static final int REQUEST_PERMISSIONS = 1;
     private String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE};
@@ -39,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     private GalleryInfo currentInfo;
 
     private TextView title;
-    private DiscreteScrollView picker;
     private InfiniteScrollAdapter infiniteAdapter;
 
     private WallpaperManager wallpaperManager;
@@ -63,11 +67,17 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     private void initView() {
         findViewById(R.id.back).setOnClickListener(this);
         findViewById(R.id.fab).setOnClickListener(this);
+        findViewById(R.id.preview).setOnClickListener(this);
+        findViewById(R.id.local).setOnClickListener(this);
+        findViewById(R.id.video).setOnClickListener(this);
+        findViewById(R.id.reset).setOnClickListener(this);
         title = findViewById(R.id.title);
-        picker = findViewById(R.id.picker);
+        DiscreteScrollView picker = findViewById(R.id.picker);
         picker.setOrientation(DSVOrientation.HORIZONTAL);
         picker.addOnItemChangedListener(this);
-        infiniteAdapter = InfiniteScrollAdapter.wrap(new GalleryAdapter(data));
+        GalleryAdapter adapter = new GalleryAdapter(data);
+        adapter.setOnGalleryListener(this);
+        infiniteAdapter = InfiniteScrollAdapter.wrap(adapter);
         picker.setAdapter(infiniteAdapter);
         picker.setItemTransitionTimeMillis(250);
         picker.setItemTransformer(new ScaleTransformer.Builder()
@@ -79,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab:
-//                Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
-//                startActivity(Intent.createChooser(intent, "选择壁纸"));
                 if (!isPerform) {
                     SetWallpaperTask task = new SetWallpaperTask(wallpaperManager, this);
                     task.execute(currentInfo.getImage());
@@ -89,7 +97,31 @@ public class MainActivity extends AppCompatActivity implements DiscreteScrollVie
                     Toast.makeText(this, "请等待", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.preview:
+                PreviewActivity.startPreviewActivity(this, 0);
+                break;
+            case R.id.local:
+                Intent intent = new Intent(Intent.ACTION_SET_WALLPAPER);
+                startActivity(Intent.createChooser(intent, "选择壁纸"));
+                break;
+            case R.id.video:
+                Intent videoIntent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+                videoIntent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                        new ComponentName(this, VideoWallpaperService.class));
+                startActivity(videoIntent);
+                break;
+            case R.id.reset:
+                Intent resetIntent = new Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER);
+                resetIntent.putExtra(WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                        new ComponentName(this, ResetWallpaperService.class));
+                startActivity(resetIntent);
+                break;
         }
+    }
+
+    @Override
+    public void onClickItem(int position) {
+        PreviewActivity.startPreviewActivity(this, currentInfo.getImage());
     }
 
     @Override

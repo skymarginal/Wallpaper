@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.yscall.wallpaper.R;
@@ -22,9 +21,14 @@ import java.util.List;
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
     private List<GalleryInfo> data;
+    private OnGalleryListener listener;
 
     public GalleryAdapter(List<GalleryInfo> data) {
         this.data = data;
+    }
+
+    public void setOnGalleryListener(OnGalleryListener listener){
+        this.listener = listener;
     }
 
     @Override
@@ -35,10 +39,18 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         Glide.with(holder.itemView.getContext())
                 .load(data.get(position).getImage())
                 .into(holder.image);
+        holder.image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(listener != null){
+                    listener.onClickItem(holder.getAdapterPosition());
+                }
+            }
+        });
     }
 
     @Override
@@ -50,9 +62,14 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         private ImageView image;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
         }
     }
+
+    public interface OnGalleryListener{
+        void onClickItem(int position);
+    }
+
 }
